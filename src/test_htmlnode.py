@@ -1,7 +1,7 @@
 # src/test_htmlnode.py HTMLNode class tests
 
 import unittest
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestTextNode(unittest.TestCase):
     def test_empty_node_creation(self):
@@ -11,16 +11,16 @@ class TestTextNode(unittest.TestCase):
     
     def test_eq_headers(self):
         print("eq_headers")
-        node = HTMLNode(tag="h1", value="Hello world")
+        node = LeafNode(tag="h1", value="Hello world")
         print(f"Node 1:\n{node}")
 
-        node2 = HTMLNode(tag="h1", value="Hello world")
+        node2 = LeafNode(tag="h1", value="Hello world")
         print(f"Node 2:\n{node2}")
 
         self.assertEqual(repr(node), repr(node2))
 
     def test_parent_child(self):
-        node = HTMLNode(
+        node = LeafNode(
             tag="a",
             value="Boot.dev link",
             props={"href": "https://www.boot.dev"}
@@ -33,7 +33,7 @@ class TestTextNode(unittest.TestCase):
             )
         print(f"Parent:\n{parent_node}")
         
-        self.assertIsInstance(node, HTMLNode)
+        self.assertIsInstance(node, LeafNode)
         self.assertIsInstance(parent_node, HTMLNode)
 
     def test_not_eq_anchors(self):
@@ -52,3 +52,7 @@ class TestTextNode(unittest.TestCase):
         print(f"Incorrect link:\n{node2}")
 
         self.assertNotEqual(repr(node), repr(node2))
+
+    def test_leaf_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
