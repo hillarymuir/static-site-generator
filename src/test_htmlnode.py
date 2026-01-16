@@ -1,4 +1,4 @@
-# src/test_htmlnode.py -- HTMLNode class tests
+#!/usr/bin/env python
 
 import unittest
 from htmlnode import HTMLNode, LeafNode, ParentNode

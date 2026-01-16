@@ -1,4 +1,4 @@
-# src/functions.py
+#!/usr/bin/env python
 
 import enum
 from htmlnode import LeafNode

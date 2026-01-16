@@ -1,4 +1,4 @@
-# src/test_functions.py -- Tests for functions.py
+#!/usr/bin/env python
 
 import unittest
 from functions import *

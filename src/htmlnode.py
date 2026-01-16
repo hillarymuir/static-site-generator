@@ -1,4 +1,4 @@
-# src/htmlnode.py -- HTMLNode class
+#!/usr/bin/env python
 
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):

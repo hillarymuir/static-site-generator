@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import textnode as tn
 
 def main():
