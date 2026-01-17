@@ -5,6 +5,9 @@ from functions import *
 from textnode import TextNode, TextType
 
 class TestFunctions(unittest.TestCase):
+
+    # text_node_to_html_node tests
+
     def test_text(self):
         node = TextNode("This is a text node", TextType.PLAIN)
         html_node = text_node_to_html_node(node)
@@ -45,3 +48,49 @@ class TestFunctions(unittest.TestCase):
             "src": "https://boot.dev",
             "alt": "This is an image node"
             })
+        
+    # split_notes_delimiter tests
+    def test_bold_split(self):
+        node = TextNode("This is text with a **bold** word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        self.assertEqual(new_nodes,
+                         [
+                            TextNode("This is text with a ", TextType.PLAIN),
+                            TextNode("bold", TextType.BOLD),
+                            TextNode(" word", TextType.PLAIN),
+                        ])
+    
+    def test_italic_split(self):
+        node = TextNode("This is text with an _italic_ word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+        self.assertEqual(new_nodes,
+                         [
+                            TextNode("This is text with an ", TextType.PLAIN),
+                            TextNode("italic", TextType.ITALIC),
+                            TextNode(" word", TextType.PLAIN),
+                        ])
+        
+    def test_code_split(self):
+        node = TextNode("This is text with a `code block` in it", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(new_nodes,
+                         [
+                            TextNode("This is text with a ", TextType.PLAIN),
+                            TextNode("code block", TextType.CODE),
+                            TextNode(" in it", TextType.PLAIN),
+                        ])
+        
+    def test_hanging_asterisks(self):
+        node = TextNode("This is text with naughty unpaired **asterisks", TextType.PLAIN)
+        with self.assertRaises(ValueError):
+            split_nodes_delimiter([node], "**", TextType.BOLD)
+
+    def test_hanging_underscore(self):
+        node = TextNode("This is text with an under_score without a friend", TextType.PLAIN)
+        with self.assertRaises(ValueError):
+            split_nodes_delimiter([node], "_", TextType.ITALIC)
+
+    def test_hanging_backtick(self):
+        node = TextNode("This is text with a `lonely backtick", TextType.PLAIN)
+        with self.assertRaises(ValueError):
+            split_nodes_delimiter([node], "`", TextType.CODE)
