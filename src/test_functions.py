@@ -94,3 +94,14 @@ class TestFunctions(unittest.TestCase):
         node = TextNode("This is text with a `lonely backtick", TextType.PLAIN)
         with self.assertRaises(ValueError):
             split_nodes_delimiter([node], "`", TextType.CODE)
+
+    def test_initial_italic(self):
+        node = TextNode("_This_ is text with an italic word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+        self.assertEqual(new_nodes,
+                         [
+                            TextNode("", TextType.PLAIN),
+                            TextNode("This", TextType.ITALIC),
+                            TextNode(" is text with an italic word", TextType.PLAIN),
+                        ])
+        

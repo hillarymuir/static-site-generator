@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from htmlnode import LeafNode
-from textnode import TextType
+from textnode import TextType, TextNode
 
 def text_node_to_html_node(text_node):
     # handle text type, convert to tag
@@ -29,6 +29,20 @@ def text_node_to_html_node(text_node):
             raise ValueError("Error: TextNode type is invalid")
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    # TODO: add support for nested inline elements
+    # note: assumes delimiter will match text_type
     new_nodes = []
+
+    for node in old_nodes:
+        # check for orphan delimiters
+        if node.text.count(delimiter) % 2 != 0:
+            raise ValueError(f"Odd number of {text_type} delimiters")
+
+        # split text at delimiter and set text type of each segment based on whether even or odd
+        split_text = node.text.split(sep=delimiter)
+        for i, text_segment in enumerate(split_text):
+            if i == 0 or i % 2 == 0:
+                new_nodes.extend([TextNode(text_segment, TextType.PLAIN)])
+            else:
+                new_nodes.extend([TextNode(text_segment, text_type)])
+
     return new_nodes
