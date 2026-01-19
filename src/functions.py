@@ -43,7 +43,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         split_text = node.text.split(sep=delimiter)
         for i, text_segment in enumerate(split_text):
             if i == 0 or i % 2 == 0:
-                new_nodes.extend([TextNode(text_segment, TextType.PLAIN)])
+                new_nodes.extend([TextNode(text_segment, node.text_type)])
             else:
                 new_nodes.extend([TextNode(text_segment, text_type)])
 
@@ -61,6 +61,10 @@ def split_nodes_image(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
+        if node.text_type is not TextType.PLAIN:
+            new_nodes.append(node)
+            continue # ignore text that is not plain; nested tag functionality to be added
+
         node_text = node.text
         image_list = extract_markdown_images(node_text)
         
@@ -70,11 +74,11 @@ def split_nodes_image(old_nodes):
             current_image_markdown = f"![{alt}]({url})"
             before, after = current_text.split(current_image_markdown, 1)
             if before:
-                new_nodes.append(TextNode(before, TextType.PLAIN))
+                new_nodes.append(TextNode(before, node.text_type))
             new_nodes.append(TextNode(alt, TextType.IMAGE, url))
             current_text = after
         if current_text:
-            new_nodes.append(TextNode(current_text, TextType.PLAIN))
+            new_nodes.append(TextNode(current_text, node.text_type))
 
     return new_nodes
 
@@ -82,6 +86,9 @@ def split_nodes_link(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
+        if node.text_type is not TextType.PLAIN:
+            new_nodes.append(node)
+            continue # ignore text that is not plain; nested tag functionality to be added
         node_text = node.text
         link_list = extract_markdown_links(node_text)
         
@@ -91,10 +98,19 @@ def split_nodes_link(old_nodes):
             current_text_markdown = f"[{text}]({url})"
             before, after = current_text.split(current_text_markdown, 1)
             if before:
-                new_nodes.append(TextNode(before, TextType.PLAIN))
+                new_nodes.append(TextNode(before, node.text_type))
             new_nodes.append(TextNode(text, TextType.LINK, url))
             current_text = after
         if current_text:
-            new_nodes.append(TextNode(current_text, TextType.PLAIN))
+            new_nodes.append(TextNode(current_text, node.text_type))
 
     return new_nodes
+
+def text_to_textnodes(text):
+    starting_textnode = [TextNode(text, TextType.PLAIN)]
+    b_textnodes = split_nodes_delimiter(starting_textnode, "**", TextType.BOLD)
+    b_i_textnodes = split_nodes_delimiter(b_textnodes, "_", TextType.ITALIC)
+    b_i_c_textnodes = split_nodes_delimiter(b_i_textnodes, "`", TextType.CODE)
+    b_i_c_img_textnodes = split_nodes_image(b_i_c_textnodes)
+    b_i_c_img_link_textnodes = split_nodes_link(b_i_c_img_textnodes)
+    return b_i_c_img_link_textnodes
