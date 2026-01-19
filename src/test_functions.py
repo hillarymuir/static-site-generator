@@ -140,6 +140,19 @@ class TestFunctions(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_images_no_images(self):
+        node = TextNode(
+            "There are no images here",
+            TextType.PLAIN
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("There are no images here", TextType.PLAIN)
+            ],
+            new_nodes,
+        )
+
     def test_split_links(self):
         node = TextNode(
             "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
@@ -158,4 +171,15 @@ class TestFunctions(unittest.TestCase):
             new_nodes,
         )
         
-    # add more edge cases here
+    def test_split_links_no_links(self):
+        node = TextNode(
+            "There are no links here",
+            TextType.PLAIN
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("There are no links here", TextType.PLAIN)
+            ],
+            new_nodes,
+        )

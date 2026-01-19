@@ -63,10 +63,6 @@ def split_nodes_image(old_nodes):
     for node in old_nodes:
         node_text = node.text
         image_list = extract_markdown_images(node_text)
-
-        # handle string with no images
-        if image_list == []:
-            new_nodes.append(node)
         
         # repeatedly split text and add TextNodes to new_nodes
         current_text = node_text
@@ -88,10 +84,6 @@ def split_nodes_link(old_nodes):
     for node in old_nodes:
         node_text = node.text
         link_list = extract_markdown_links(node_text)
-
-        # handle string with no links
-        if link_list == []:
-            new_nodes.append(node)
         
         # repeatedly split text and add TextNodes to new_nodes
         current_text = node_text
