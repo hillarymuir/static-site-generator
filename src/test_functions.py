@@ -105,3 +105,106 @@ class TestFunctions(unittest.TestCase):
                             TextNode(" is text with an italic word", TextType.PLAIN),
                         ])
         
+    # test extraction of markdown images and links
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+    
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        )
+        self.assertListEqual([("to boot dev", "https://www.boot.dev"),
+                              ("to youtube", "https://www.youtube.com/@bootdotdev")],
+                              matches)
+    # add more edge cases here
+
+    # test splitting of image and link strings into TextNodes
+    def test_split_images(self):
+        node = TextNode(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with an ", TextType.PLAIN),
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" and another ", TextType.PLAIN),
+                TextNode(
+                    "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
+                ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_images_no_images(self):
+        node = TextNode(
+            "There are no images here",
+            TextType.PLAIN
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("There are no images here", TextType.PLAIN)
+            ],
+            new_nodes,
+        )
+
+    def test_split_images_only_image(self):
+        node = TextNode(
+            "![image](https://i.imgur.com/zjjcJKZ.png)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+            ],
+            new_nodes,
+        )
+
+    def test_split_links(self):
+        node = TextNode(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with a link ", TextType.PLAIN),
+                TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+                TextNode(" and ", TextType.PLAIN),
+                TextNode(
+                    "to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"
+                ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_links_no_links(self):
+        node = TextNode(
+            "There are no links here",
+            TextType.PLAIN
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("There are no links here", TextType.PLAIN)
+            ],
+            new_nodes,
+        )
+
+    def test_split_links_only_link(self):
+        node = TextNode("[to boot dev](https://www.boot.dev)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+            ],
+            new_nodes,
+        )
