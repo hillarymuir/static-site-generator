@@ -153,6 +153,19 @@ class TestFunctions(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_images_only_image(self):
+        node = TextNode(
+            "![image](https://i.imgur.com/zjjcJKZ.png)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+            ],
+            new_nodes,
+        )
+
     def test_split_links(self):
         node = TextNode(
             "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
@@ -170,7 +183,7 @@ class TestFunctions(unittest.TestCase):
             ],
             new_nodes,
         )
-        
+
     def test_split_links_no_links(self):
         node = TextNode(
             "There are no links here",
@@ -180,6 +193,18 @@ class TestFunctions(unittest.TestCase):
         self.assertListEqual(
             [
                 TextNode("There are no links here", TextType.PLAIN)
+            ],
+            new_nodes,
+        )
+
+    def test_split_links_only_link(self):
+        node = TextNode("[to boot dev](https://www.boot.dev)",
+            TextType.PLAIN,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
             ],
             new_nodes,
         )
