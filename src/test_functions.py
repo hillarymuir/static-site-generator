@@ -208,3 +208,32 @@ class TestFunctions(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    # tests for text_to_textnodes
+
+    def test_text_to_textnodes_all_modifiers(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        new_nodes = text_to_textnodes(text)
+        self.assertListEqual([
+                TextNode("This is ", TextType.PLAIN),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.PLAIN),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.PLAIN),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.PLAIN),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.PLAIN),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+            new_nodes,
+        )
+
+    def test_text_to_textnodes_no_modifiers(self):
+        text = "This is text"
+        new_nodes = text_to_textnodes(text)
+        self.assertListEqual([
+                TextNode("This is text", TextType.PLAIN)
+            ],
+            new_nodes,
+        )

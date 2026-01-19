@@ -98,3 +98,8 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(current_text, TextType.PLAIN))
 
     return new_nodes
+
+def text_to_textnodes(text):
+    textnodes = []
+
+    return textnodes
