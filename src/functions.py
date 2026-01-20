@@ -130,4 +130,36 @@ def markdown_to_blocks(md):
     return block_list
 
 def block_to_block_type(block):
-    return
+
+    # check for the easy ones (heading and code)
+    heading_list = ["# ", "## ", "### ", "#### ", "##### ", "###### "]
+    if block.startswith(tuple(heading_list)):
+        return BlockType.HEADING
+    elif block.startswith("```\n") and block.endswith("```"):
+        return BlockType.CODE
+
+    # assume each type of line-by-line blocktype is true, then try to disprove each one
+    is_quote = True
+    is_unordered_list = True
+    is_ordered_list = True
+    ordered_list_correct_line = 1
+    line_list = block.split("\n")
+    for line in line_list:
+        if not line.startswith("> "):
+            is_quote = False
+        if not line.startswith("- "):
+            is_unordered_list = False
+        if not line.startswith(f"{ordered_list_correct_line}. "):
+            is_ordered_list = False
+        ordered_list_correct_line += 1
+
+    # check if any of the line-by-line blocktypes have not been disproven
+    if is_quote:
+        return BlockType.QUOTE
+    elif is_unordered_list:
+        return BlockType.UNORDERED_LIST
+    elif is_ordered_list:
+        return BlockType.ORDERED_LIST
+
+    # return default if no other blocktypes found
+    return BlockType.PARAGRAPH
