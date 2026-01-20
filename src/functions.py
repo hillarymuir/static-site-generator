@@ -119,4 +119,9 @@ def text_to_textnodes(text):
 
 # block markdown
 def markdown_to_blocks(md):
-    return
+    block_list = md.split("\n\n")
+    for i, block in enumerate(block_list):
+        block_list[i] = block.strip()
+        if block == "":
+            del block_list[i]
+    return block_list
