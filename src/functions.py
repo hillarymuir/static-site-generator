@@ -5,6 +5,8 @@ import re
 from htmlnode import LeafNode
 from textnode import TextType, TextNode
 
+# inline markdown
+
 def text_node_to_html_node(text_node):
     # handle text type, convert to tag
     match text_node.text_type:
@@ -114,3 +116,7 @@ def text_to_textnodes(text):
     b_i_c_img_textnodes = split_nodes_image(b_i_c_textnodes)
     b_i_c_img_link_textnodes = split_nodes_link(b_i_c_img_textnodes)
     return b_i_c_img_link_textnodes
+
+# block markdown
+def markdown_to_blocks(md):
+    return
