@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+#TODO: refactor to split into multiple files
+
 import re
 
 from htmlnode import LeafNode
 from textnode import TextType, TextNode
+from blocktype import BlockType
 
 # inline markdown
 
@@ -125,3 +128,6 @@ def markdown_to_blocks(md):
         if block == "":
             del block_list[i]
     return block_list
+
+def block_to_block_type(block):
+    return

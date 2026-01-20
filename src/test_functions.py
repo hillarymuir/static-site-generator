@@ -279,3 +279,84 @@ This is the same paragraph on a new line
             blocks,
             [],
         )
+
+    # block to block type
+    def test_block_to_block_type_para(self):
+        block = "This is a paragraph."
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.PARAGRAPH
+        )
+
+    def test_block_to_block_type_h1(self):
+        block = "# This is a heading 1."
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.HEADING
+        )
+
+    def test_block_to_block_type_h6(self):
+        block = "###### This is a heading 6."
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.HEADING
+        )
+
+    def test_block_to_block_type_invalid_heading(self):
+        block = "####### This is a naughty heading 7."
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.PARAGRAPH
+        )
+
+    def test_block_to_block_type_code(self):
+        block = "```\nThis is a code block```"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.CODE
+        )
+
+    def test_block_to_block_type_quote(self):
+        block = "> This is a multiline quote block\n> This is the second line"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.QUOTE
+        )
+
+    def test_block_to_block_type_unordered_list(self):
+        block = "- This is a multiline unordered list block\n- This is the second line"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.UNORDERED_LIST
+        )
+
+    def test_block_to_block_type_ordered_list(self):
+        block = "1. This is a multiline ordered list block\n2. This is the second line"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.ORDERED_LIST
+        )
+
+    def test_block_to_block_type_ordered_list_bad_start(self):
+        block = "2. This is a multiline ordered list block\n3. But it starts at 2!"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.PARAGRAPH
+        )
+
+    def test_block_to_block_type_ordered_list_number_skip(self):
+        block = "1. This is a multiline ordered list block\n3. But it skips 2!"
+        blocktype = block_to_block_type(block)
+        self.assertEqual(
+            blocktype,
+            BlockType.PARAGRAPH
+        )
