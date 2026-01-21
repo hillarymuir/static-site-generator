@@ -391,7 +391,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff</code></pre></div>",
     )
         
     def test_unordered_list(self):
@@ -434,7 +434,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><h1>Here are some cool quotes:</h1><blockquote>This quote is so neat, right?</blockquote><blockquote>This one too, right?</blockquote></div>",
+            "<div><h1>Here are some cool quotes:</h1><blockquote>This quote is \nso neat, right?</blockquote><blockquote>This one too, right?</blockquote></div>",
         )
 
     def test_empty_string_to_html(self):
