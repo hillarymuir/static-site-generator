@@ -32,3 +32,15 @@ Copying static/index.css to public
 Copying static/nest_test/text.txt to public/nest_test
 Copying static/images/tolkien.png to public/images
 Copying static/index.css to public
+Copying static/nest_test/text.txt to public/nest_test
+Copying static/images/tolkien.png to public/images
+Copying static/index.css to public
+Copying static/nest_test/text.txt to public/nest_test
+Copying static/images/tolkien.png to public/images
+Copying static/index.css to public
+Copying static/nest_test/text.txt to public/nest_test
+Copying static/images/tolkien.png to public/images
+Copying static/index.css to public
+Copying static/nest_test/text.txt to public/nest_test
+Copying static/images/tolkien.png to public/images
+Copying static/index.css to public
