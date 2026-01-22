@@ -1,0 +1,7 @@
+Copying static/tolkien.png to src/public
+Copying static/nest_test/text.txt to src/public/nest_test
+Copying static/index.css to src/public
+Copying static/tolkien.png to src/public
+Copying static/nest_test/text.txt to src/public/nest_test
+Copying static/index.css to src/public
+Copying static/tolkien.png to src/public
