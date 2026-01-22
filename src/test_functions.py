@@ -446,3 +446,13 @@ the **same** even with inline stuff
             html,
             "<div></div>",
         )
+
+    def test_extract_title(self):
+        self.assertEqual(
+            extract_title("# Test heading"),
+            "Test heading"
+        )
+
+    def test_extract_title_exception(self):
+        with self.assertRaises(Exception):
+            extract_title("Test heading")
