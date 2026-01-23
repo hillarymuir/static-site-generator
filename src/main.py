@@ -6,18 +6,18 @@ from page_functions import *
 def main():
     print("Hello from static-site-generator!")
     if sys.argv:
-        basepath = sys.argv[0] #.split("/")[0]
+        basepath = sys.argv[1] + "/"
     else:
         basepath = "/"
     copy_contents_to_destination(
         "static", 
-        "public", 
-        "public"
+        "docs", 
+        "docs"
         )
     generate_pages_recursive(
         "content", 
         "template.html", 
-        "public", basepath
+        "docs", basepath
         )
 
 if __name__ == "__main__":
