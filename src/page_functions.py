@@ -57,12 +57,15 @@ def generate_page(from_path, template_path, dest_path, basepath):
     file_with_title = template_file_contents.replace("{{ Title }}", page_title)
     file_with_title_and_content = file_with_title.replace("{{ Content }}", from_file_html_str)
 
-    file_with_title_and_content = file_with_title_and_content.replace("href=\"/", f"href=\"{basepath}")
-    file_with_title_and_content = file_with_title_and_content.replace("src=\"/", f"src=\"{basepath}")
+    file_with_basepath = file_with_title_and_content.replace(
+        'href="/', f"href=\"{basepath}"
+        ).replace(
+            'src=\"/', f"src=\"{basepath}"
+                  )
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w+") as f:
-        f.write(file_with_title_and_content)
+        f.write(file_with_basepath)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     for entry in os.listdir(dir_path_content):
