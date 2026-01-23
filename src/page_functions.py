@@ -41,7 +41,7 @@ def copy_contents_to_destination(source_dir, destination_dir, parent):
             os.mkdir(new_destination_path)
             copy_contents_to_destination(entry_path, new_destination_path, parent)
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     f = open(from_path)
     from_file_contents = f.read()
@@ -57,19 +57,22 @@ def generate_page(from_path, template_path, dest_path):
     file_with_title = template_file_contents.replace("{{ Title }}", page_title)
     file_with_title_and_content = file_with_title.replace("{{ Content }}", from_file_html_str)
 
+    file_with_title_and_content = file_with_title_and_content.replace("href=\"/", f"href=\"{basepath}")
+    file_with_title_and_content = file_with_title_and_content.replace("src=\"/", f"src=\"{basepath}")
+
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w+") as f:
         f.write(file_with_title_and_content)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     for entry in os.listdir(dir_path_content):
         new_destination_path = os.path.join(dest_dir_path, entry)
         if new_destination_path[-3:] == ".md":
             new_destination_path = new_destination_path[:-3] + ".html"
         entry_path = os.path.join(dir_path_content, entry)
         if os.path.isfile(entry_path):
-            generate_page(entry_path, template_path, new_destination_path)
+            generate_page(entry_path, template_path, new_destination_path, basepath)
         else:
             new_content_path = os.path.join(dir_path_content, entry)
             os.makedirs(new_destination_path, exist_ok=True)
-            generate_pages_recursive(new_content_path, template_path, new_destination_path)
+            generate_pages_recursive(new_content_path, template_path, new_destination_path, basepath)
