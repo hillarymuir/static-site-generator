@@ -265,3 +265,12 @@ def markdown_to_html_node(md):
 
     parent_node = ParentNode("div", high_lvl_children)
     return parent_node
+
+def extract_title(markdown):
+    block_list = markdown_to_blocks(markdown)
+
+    for block in block_list:
+        if block.startswith("# "):
+            return block[2:]
+    
+    raise Exception("Error: no h1 header")

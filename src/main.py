@@ -1,15 +1,24 @@
 #!/usr/bin/env python
 
-import textnode as tn
+import sys
+from page_functions import *
 
 def main():
     print("Hello from static-site-generator!")
-
-    test_textnode = tn.TextNode(
-        "This is some anchor text", "link", "https://www.boot.dev"
+    if sys.argv:
+        basepath = sys.argv[1] + "/"
+    else:
+        basepath = "/"
+    copy_contents_to_destination(
+        "static", 
+        "docs", 
+        "docs"
         )
-    print(test_textnode)
-
+    generate_pages_recursive(
+        "content", 
+        "template.html", 
+        "docs", basepath
+        )
 
 if __name__ == "__main__":
     main()
